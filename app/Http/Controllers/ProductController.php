@@ -19,7 +19,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $categoryName = $request->get('search');
-        $arrayCategoryId = Category::getCategoryIds($categoryName);
+        $arrayCategoryId = Category::getCategoryIdsByName($categoryName);
         $products = Product::getProductByCategoryIds($arrayCategoryId);
 
         if ($request->ajax()) {

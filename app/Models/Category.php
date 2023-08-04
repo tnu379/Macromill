@@ -26,7 +26,7 @@ class Category extends Model
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
-    
+
     public static function getRecursiveChildren($categoryId)
     {
         $query = <<<SQL
@@ -48,11 +48,11 @@ class Category extends Model
         foreach ($ids as $id) {
             $results[] = $id->id;
         }
-        return $results;
+        return $results ?? [];
     }
 
 
-    public static function getCategoryIds($categoryName){
+    public static function getCategoryIdsByName($categoryName){
         $arrayId = [];
         $categories = Category::where('name', 'like', '%' . $categoryName . '%')->get();
         if(count($categories)){
