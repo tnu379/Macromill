@@ -26,21 +26,7 @@ class Category extends Model
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
-    public function lowestLevelChildren()
-    {
-        if ($this->children->isEmpty()) {
-            return collect([$this]);
-        }
-
-        $lowestLevelChildren = collect();
-
-        foreach ($this->children as $child) {
-            $lowestLevelChildren = $lowestLevelChildren->merge($child->lowestLevelChildren());
-        }
-
-        return $lowestLevelChildren;
-    }
-
+    
     public static function getRecursiveChildren($categoryId)
     {
         $query = <<<SQL
