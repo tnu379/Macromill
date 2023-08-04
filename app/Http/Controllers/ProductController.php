@@ -20,7 +20,7 @@ class ProductController extends Controller
     {
         $categoryName = $request->get('search');
         $arrayCategoryId = Category::getCategoryIds($categoryName);
-        $products = Product::whereIn('category_id', $arrayCategoryId)->get();
+        $products = Product::getProductByCategoryIds($arrayCategoryId);
 
         if ($request->ajax()) {
             return view('products.partials.partial', compact('products'));

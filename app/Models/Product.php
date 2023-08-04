@@ -31,4 +31,9 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    public static function getProductByCategoryIds($ids){
+        $rs = self::whereIn('category_id', $ids)->get();
+        return $rs;
+    }
 }
