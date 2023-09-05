@@ -7,10 +7,18 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Product;
+use App\Repositories\ProductRepositoryInterface;
+use App\Services\ProductService;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    protected $productService;
+
+    public function __construct(ProductService $productService)
+    {
+        $this->productService = $productService;
+    }
     /**
      * Display a listing of the products.
      *
@@ -18,25 +26,22 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $categoryName = $request->get('search');
-        $arrayCategoryId = Category::getCategoryIdsByName($categoryName);
-        $products = Product::getProductByCategoryIds($arrayCategoryId);
-
-        if ($request->ajax()) {
-            return view('products.partials.partial', compact('products'));
-        }
-
-        return view('products.index', compact('products'));
+        // $categoryName = $request->get('search');
+        // $arrayCategoryId = Category::getCategoryIdsByName($categoryName);
+        $products = Product::paginate(10);
+        // return response()->json($products);
+        return view('products.index', ['products' => $products]);
     }
 
-    /**
-     * Show the form for creating a new product.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+
+    public function show($id)
     {
-        return view('products.create');
+        $product = $this->productService->getProductById($id);
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
+        return response()->json($product);
     }
 
     /**
@@ -48,9 +53,29 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $validatedData = $request->validated();
+        $product =  $this->productService->createProduct($validatedData);
+        return response()->json([
+            'message' => 'Product created successfully!',
+            'product' => $product
+        ], 201);
+    }
 
-        Product::create($validatedData);
+    public function destroy($id)
+    {
+        $this->productService->deleteProduct($id);
 
-        return redirect()->route('products.index')->with('success', 'Product created successfully!');
+        return response()->json([
+            'message' => 'Product deleted successfully!'
+        ], 200);
+    }
+
+    public function update(ProductRequest $request, Product $product)
+    {
+        $validatedData = $request->validated();
+        $product =  $this->productService->updateProduct($product, $validatedData);
+        return response()->json([
+            'message' => 'Product updated successfully!',
+            'product' => $product
+        ], 200);
     }
 }

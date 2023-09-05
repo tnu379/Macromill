@@ -14,10 +14,11 @@ class Product extends Model
     protected $fillable = [
         'name',
         'description',
-        'price', 'quantity',
+        'price',
+        'quantity',
         'category_id'
     ];
-    
+
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -26,5 +27,11 @@ class Product extends Model
     public static function getProductByCategoryIds($ids){
         $rs = self::whereIn('category_id', $ids)->get();
         return $rs;
+    }
+
+    protected static function boot()
+    {
+        
+        parent::boot();
     }
 }

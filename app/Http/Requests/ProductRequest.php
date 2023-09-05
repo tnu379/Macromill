@@ -4,7 +4,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ProductRequest extends FormRequest
 {
@@ -33,5 +35,17 @@ class ProductRequest extends FormRequest
             'quantity' => 'required|integer',
             'category_id' => 'required|exists:categories,id', // Assuming you have a "categories" table
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $errors = $validator->errors();
+
+        $response = response()->json([
+            'message' => 'Invalid data send',
+            'details' => $errors->messages(),
+        ], 422);
+
+        throw new HttpResponseException($response);
     }
 }
