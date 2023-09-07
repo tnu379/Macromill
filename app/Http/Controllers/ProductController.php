@@ -50,15 +50,23 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductRequest $request)
+    public function store(Request $request)
     {
-        $validatedData = $request->validated();
-        $product =  $this->productService->createProduct($validatedData);
-        return response()->json([
-            'message' => 'Product created successfully!',
-            'product' => $product
-        ], 201);
+        $isOk  = $this->checkValidate($request->post('name'));
+        if($isOk['status']){
+            return json_encode( $isOk );
+        }
+        // If validation passes, create the user
+        // User::create($request->all());
+
+        return response()->json(['message' => 'User created successfully']);
     }
+
+    public function create(Request $request)
+    {
+        return view('products.create');
+    }
+
 
     public function destroy($id)
     {
@@ -77,5 +85,22 @@ class ProductController extends Controller
             'message' => 'Product updated successfully!',
             'product' => $product
         ], 200);
+    }
+    public function checkValidate($value){
+        $req =[
+            'status' => false,
+            'key' => 'name',
+            'mess'=>'',
+        ];
+        if(empty($value)){
+            $req['status'] = true;
+            $req['mess'] = 'tên không được để trống';
+        }elseif(strlen($value) > 255){
+            $req['status'] = true;
+            $req['mess'] = 'ký tự quá dài';
+        }
+
+        return $req;
+
     }
 }

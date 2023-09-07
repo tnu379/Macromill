@@ -16,3 +16,36 @@ hr {
     border: 3px solid;
     color: #2065afa3;
 }
+.invalid-feedback{
+    display: block !important;
+}
+#blah{
+    width: 300px;
+    height: 300px;
+}
+.custom-file-input{
+    opacity: 1;
+}
+.custom-file-label{
+    position: relative;
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+}
+.custom-file-label::after{
+    display: none;
+}
+.col-table td{
+    position: relative;
+}
+.col-table td input{
+    width: 100%;
+}
+.col-table:hover td .img-table{
+    display: block;
+    position: absolute;
+    z-index: 2;
+}
+.img-table{
+    display: none;
+}

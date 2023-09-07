@@ -37,7 +37,8 @@
             <div class="col-md-12 mt-3">
                 <div class="row">
                     <div class="col-md-6">
-                        <a href="" class="btn btn-success"><i class="fas fa-plus"></i> Tạo Mới</a>
+                        <button href="" class="btn btn-success" data-toggle="modal" data-target="#userModal"><i
+                                class="fas fa-plus"></i> Tạo Mới</button>
                     </div>
                     <div class="col-md-6  text-right">
                         <button href="" class="btn btn-primary"> Tìm Kiếm</button>
@@ -57,5 +58,35 @@
         <div class="mt-3">
             {!! $products->links('pagination') !!}
         </div>
+
+        <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document" style="
+            top: 200px !important;
+        ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="userModalLabel">Add User</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="{{ route('products.store') }}" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" id="name" name="name">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <!-- Add more form fields as needed -->
+                            <input type="button" class="btn btn-primary" value="Save" onclick="addUser()">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
+
 @endsection
